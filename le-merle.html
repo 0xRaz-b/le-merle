@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Merle</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+–blanc-casse: #f2ede6;
+–beige:       #e4ddd2;
+–beige-fonce: #c8bfb0;
+–taupe:       #8c8074;
+–brun-chaud:  #5c4f42;
+–encre:       #1e1c19;
+–fond:        #f7f3ee;
+–ligne:       rgba(140,128,116,0.25);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–fond);
+color: var(–encre);
+font-family: ‘EB Garamond’, Georgia, serif;
+overflow-x: hidden;
+}
+
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+text-align: center;
+padding: 5rem 2rem 4rem;
+position: relative;
+border-bottom: 1px solid var(–ligne);
+background:
+radial-gradient(ellipse 70% 50% at 50% 80%, rgba(200,191,176,0.25) 0%, transparent 70%),
+var(–fond);
+}
+
+.hero-eyebrow {
+font-family: ‘Jost’, sans-serif;
+font-weight: 200;
+letter-spacing: 0.5em;
+font-size: 0.65rem;
+color: var(–taupe);
+text-transform: uppercase;
+margin-bottom: 3rem;
+opacity: 0;
+animation: fadeUp 0.9s 0.2s forwards;
+}
+
+.bird-wrap {
+margin: 0 auto 2.5rem;
+width: 70px;
+opacity: 0;
+animation: fadeUp 1s 0.1s forwards;
+}
+
+.hero-title {
+font-family: ‘Libre Baskerville’, serif;
+font-size: clamp(4.5rem, 13vw, 9.5rem);
+font-weight: 400;
+line-height: 1;
+letter-spacing: 0.04em;
+color: var(–encre);
+opacity: 0;
+animation: fadeUp 1s 0.4s forwards;
+}
+
+.hero-rule {
+display: block;
+width: 48px;
+height: 1px;
+background: var(–beige-fonce);
+margin: 2.2rem auto;
+opacity: 0;
+animation: fadeUp 0.9s 0.65s forwards;
+}
+
+.hero-subtitle {
+font-family: ‘EB Garamond’, serif;
+font-style: italic;
+font-size: clamp(1rem, 2.2vw, 1.28rem);
+color: var(–taupe);
+letter-spacing: 0.06em;
+opacity: 0;
+animation: fadeUp 0.9s 0.8s forwards;
+}
+
+.scroll-hint {
+position: absolute;
+bottom: 2.5rem;
+font-family: ‘Jost’, sans-serif;
+font-size: 0.58rem;
+letter-spacing: 0.4em;
+color: var(–beige-fonce);
+text-transform: uppercase;
+animation: pulse 3s ease-in-out infinite;
+}
+
+.intro {
+max-width: 640px;
+margin: 0 auto;
+padding: 6rem 2rem 5rem;
+text-align: center;
+border-bottom: 1px solid var(–ligne);
+}
+
+.intro p {
+font-size: clamp(1.15rem, 2.2vw, 1.35rem);
+line-height: 1.85;
+color: var(–brun-chaud);
+font-style: italic;
+}
+
+.parallele {
+max-width: 1100px;
+margin: 0 auto;
+padding: 6rem 2rem 6rem;
+}
+
+.section-label {
+font-family: ‘Jost’, sans-serif;
+font-size: 0.6rem;
+letter-spacing: 0.55em;
+color: var(–taupe);
+text-transform: uppercase;
+text-align: center;
+margin-bottom: 0.8rem;
+}
+
+.section-title {
+font-family: ‘Libre Baskerville’, serif;
+font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+font-weight: 400;
+text-align: center;
+color: var(–encre);
+margin-bottom: 4.5rem;
+letter-spacing: 0.02em;
+}
+.section-title em { font-style: italic; color: var(–taupe); }
+
+.rows { display: flex; flex-direction: column; }
+
+.row {
+display: grid;
+grid-template-columns: 1fr 1px 1fr;
+border-top: 1px solid var(–ligne);
+opacity: 0;
+transform: translateY(18px);
+transition: opacity 0.65s ease, transform 0.65s ease;
+}
+.row:last-child { border-bottom: 1px solid var(–ligne); }
+.row.visible { opacity: 1; transform: translateY(0); }
+
+.col { padding: 3rem 2.8rem; }
+.col-left  { text-align: right; }
+.col-right { text-align: left; }
+
+.col-sep {
+background: var(–ligne);
+position: relative;
+}
+.col-sep::before {
+content: ‘’;
+position: absolute;
+top: 50%; left: 50%;
+transform: translate(-50%, -50%);
+width: 5px; height: 5px;
+border-radius: 50%;
+background: var(–beige-fonce);
+}
+
+.col-tag {
+font-family: ‘Jost’, sans-serif;
+font-size: 0.58rem;
+letter-spacing: 0.45em;
+text-transform: uppercase;
+color: var(–beige-fonce);
+margin-bottom: 0.7rem;
+}
+
+.col-heading {
+font-family: ‘Libre Baskerville’, serif;
+font-style: italic;
+font-size: 1.08rem;
+color: var(–brun-chaud);
+margin-bottom: 0.8rem;
+font-weight: 400;
+line-height: 1.4;
+}
+
+.col-text {
+font-size: 1rem;
+line-height: 1.8;
+color: #4a4238;
+}
+
+.devise {
+background: var(–encre);
+color: var(–blanc-casse);
+text-align: center;
+padding: 6rem 2rem;
+}
+
+.devise-text {
+font-family: ‘EB Garamond’, serif;
+font-style: italic;
+font-size: clamp(1.3rem, 3vw, 2rem);
+line-height: 1.7;
+max-width: 680px;
+margin: 0 auto 1.8rem;
+opacity: 0.9;
+}
+
+.devise-rule {
+display: block;
+width: 32px;
+height: 1px;
+background: var(–taupe);
+margin: 0 auto 1.5rem;
+}
+
+.devise-source {
+font-family: ‘Jost’, sans-serif;
+font-size: 0.6rem;
+letter-spacing: 0.4em;
+text-transform: uppercase;
+color: var(–taupe);
+}
+
+.footer {
+padding: 4rem 2rem;
+text-align: center;
+border-top: 1px solid var(–ligne);
+background: var(–fond);
+}
+
+.footer-bird { width: 36px; margin: 0 auto 1.5rem; opacity: 0.3; }
+
+.footer-name {
+font-family: ‘Libre Baskerville’, serif;
+font-size: 1.8rem;
+font-weight: 400;
+letter-spacing: 0.12em;
+color: var(–encre);
+margin-bottom: 0.5rem;
+}
+
+.footer-sub {
+font-family: ‘Jost’, sans-serif;
+font-size: 0.6rem;
+letter-spacing: 0.45em;
+text-transform: uppercase;
+color: var(–taupe);
+}
+
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(16px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+0%, 100% { opacity: 0.25; }
+50% { opacity: 0.55; }
+}
+
+@media (max-width: 640px) {
+.row { grid-template-columns: 1fr; }
+.col-sep { display: none; }
+.col { padding: 2rem 1.2rem; }
+.col-left {
+text-align: left;
+border-bottom: 1px solid var(–ligne);
+background: rgba(200,191,176,0.08);
+}
+}
+</style>
+
+</head>
+<body>
+
+<section class="hero">
+  <div class="bird-wrap">
+    <svg viewBox="0 0 90 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 38 Q22 12 48 18 Q68 22 82 8 Q75 26 58 29 Q72 31 76 43 Q56 33 42 36 Q26 40 8 38Z" fill="#1e1c19" opacity="0.75"/>
+      <circle cx="77" cy="11" r="2.2" fill="#1e1c19" opacity="0.75"/>
+      <path d="M8 38 Q3 46 0 56" stroke="#1e1c19" stroke-width="1.3" fill="none" opacity="0.5"/>
+      <path d="M8 38 Q5 47 7 56" stroke="#1e1c19" stroke-width="0.9" fill="none" opacity="0.4"/>
+    </svg>
+  </div>
+
+  <p class="hero-eyebrow">Table gastronomique</p>
+  <h1 class="hero-title">Le Merle</h1>
+  <span class="hero-rule"></span>
+  <p class="hero-subtitle">Là où le chant devient saveur</p>
+  <p class="scroll-hint">↓</p>
+</section>
+
+<div class="intro">
+  <p>Un nom simple. Un oiseau commun — et pourtant le plus musical de nos jardins. Une maison qui ne cherche pas à impressionner, mais à toucher juste.</p>
+</div>
+
+<section class="parallele">
+  <p class="section-label">Le parallèle</p>
+  <h2 class="section-title">L'oiseau &amp; <em>la table</em></h2>
+
+  <div class="rows">
+
+```
+<div class="row" data-delay="0">
+  <div class="col col-left">
+    <p class="col-tag">L'oiseau</p>
+    <p class="col-heading">Un chant reconnaissable entre mille</p>
+    <p class="col-text">Le merle ne cherche pas à être le plus beau. Son chant lent, posé, presque nonchalant, est pourtant celui qu'on arrête d'écouter le matin.</p>
+  </div>
+  <div class="col-sep"></div>
+  <div class="col col-right">
+    <p class="col-tag">La table</p>
+    <p class="col-heading">Une signature discrète mais mémorable</p>
+    <p class="col-text">Pas de spectacle dans l'assiette. Une main reconnaissable dans l'assaisonnement, l'équilibre, la justesse — ce petit quelque chose qu'on ne saurait nommer mais qu'on n'oublie pas.</p>
+  </div>
+</div>
+
+<div class="row" data-delay="0.1">
+  <div class="col col-left">
+    <p class="col-tag">L'oiseau</p>
+    <p class="col-heading">Plumage sombre, bec couleur d'automne</p>
+    <p class="col-text">Ni ostentatoire ni terne. Le merle tire sa beauté de la sobriété — un contraste subtil, une élégance que l'on remarque sans savoir pourquoi.</p>
+  </div>
+  <div class="col-sep"></div>
+  <div class="col col-right">
+    <p class="col-tag">La table</p>
+    <p class="col-heading">Une salle sans chichis, du linge épais</p>
+    <p class="col-text">Des murs clairs, des boiseries patinées, des nappes en coton lourd. Rien d'inutile. Tout au service du confort et de la durée d'un bon repas.</p>
+  </div>
+</div>
+
+<div class="row" data-delay="0.2">
+  <div class="col col-left">
+    <p class="col-tag">L'oiseau</p>
+    <p class="col-heading">Oiseau de jardins, pas de vitrines</p>
+    <p class="col-text">On le trouve dans les cours intérieures, sous les haies touffues. Pas sur les places touristiques — il préfère les endroits où il peut vraiment s'installer.</p>
+  </div>
+  <div class="col-sep"></div>
+  <div class="col col-right">
+    <p class="col-tag">La table</p>
+    <p class="col-heading">Une adresse que l'on donne à voix basse</p>
+    <p class="col-text">Pas de façade voyante. On y vient parce qu'un ami vous l'a glissé à l'oreille. La salle est pleine de gens qui savent pourquoi ils sont là.</p>
+  </div>
+</div>
+
+<div class="row" data-delay="0.3">
+  <div class="col col-left">
+    <p class="col-tag">L'oiseau</p>
+    <p class="col-heading">Ancré dans les saisons</p>
+    <p class="col-text">Au printemps il chante, en hiver il se tait. Le merle ne triche pas avec le temps — il vit avec lui, pleinement, honnêtement.</p>
+  </div>
+  <div class="col-sep"></div>
+  <div class="col col-right">
+    <p class="col-tag">La table</p>
+    <p class="col-heading">La carte change, les producteurs restent</p>
+    <p class="col-text">Les asperges quand il faut, le gibier quand il faut. Des fournisseurs que l'on connaît par leur prénom. Ici, la saison n'est pas un argument marketing — c'est une évidence.</p>
+  </div>
+</div>
+
+<div class="row" data-delay="0.4">
+  <div class="col col-left">
+    <p class="col-tag">L'oiseau</p>
+    <p class="col-heading">Commun et irremplaçable</p>
+    <p class="col-text">On le voit partout — et pourtant, le jour où il disparaît du jardin, quelque chose manque. Sa présence était une évidence dont on mesure la valeur après coup.</p>
+  </div>
+  <div class="col-sep"></div>
+  <div class="col col-right">
+    <p class="col-tag">La table</p>
+    <p class="col-heading">Ce qu'on n'apprécie vraiment qu'une fois parti</p>
+    <p class="col-text">Ces maisons-là, on les tient pour acquises. On y retourne depuis vingt ans. Et le jour où elles ferment, on réalise qu'elles étaient le cœur de quelque chose.</p>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<section class="devise">
+  <p class="devise-text">
+    « Le merle ne cherche pas à être remarqué.<br>
+    Il chante, simplement — et c'est justement pour ça<br>
+    qu'on s'arrête pour l'écouter. »
+  </p>
+  <span class="devise-rule"></span>
+  <p class="devise-source">Philosophie de maison · Le Merle</p>
+</section>
+
+<footer class="footer">
+  <div class="footer-bird">
+    <svg viewBox="0 0 90 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 38 Q22 12 48 18 Q68 22 82 8 Q75 26 58 29 Q72 31 76 43 Q56 33 42 36 Q26 40 8 38Z" fill="#1e1c19"/>
+      <circle cx="77" cy="11" r="2.2" fill="#1e1c19"/>
+    </svg>
+  </div>
+  <p class="footer-name">Le Merle</p>
+  <p class="footer-sub">Gastronomie · Saison · Terroir</p>
+</footer>
+
+<script>
+  const rows = document.querySelectorAll('.row');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const d = parseFloat(e.target.dataset.delay || 0);
+        setTimeout(() => e.target.classList.add('visible'), d * 1000);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  rows.forEach(r => obs.observe(r));
+</script>
+
+</body>
+</html>
